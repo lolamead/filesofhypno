@@ -1,0 +1,61 @@
+// PLS NOTE THIS IS JUST THE BEGINING OF THE WORLD TRANSPORTER
+
+using UnityEngine;
+
+public class WorldTransporter : MonoBehaviour
+{
+    [Header("World Transformation Settings")]
+    public float mirrorFactor = -1f; // A factor to mirror on X-axis (use -1 for simple mirror)
+    public Vector3 distortionFactor = new Vector3(1.1f, 1.1f, 1f); // Slight distortion scaling
+
+    [Header("Worlds")]
+    public GameObject normalWorld; // Reference to the normal world objects
+    public GameObject mirroredWorld; // Reference to the mirrored world objects
+
+    private bool isMirrored = false;
+
+    private void Update()
+    {
+        // Check for the "R" key press
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ToggleWorld();
+        }
+    }
+
+    private void ToggleWorld()
+    {
+        if (isMirrored)
+        {
+            // Switch back to normal world
+            ApplyWorldTransform(normalWorld, Vector3.one); // Restore to normal scale
+            mirroredWorld.SetActive(false);
+            normalWorld.SetActive(true);
+        }
+        else
+        {
+            // Switch to mirrored world
+            ApplyWorldTransform(mirroredWorld, distortionFactor); // Apply distortion
+            normalWorld.SetActive(false);
+            mirroredWorld.SetActive(true);
+        }
+
+        isMirrored = !isMirrored; // Toggle state
+    }
+
+    private void ApplyWorldTransform(GameObject world, Vector3 scale)
+    {
+        // Apply a simple mirroring on the X axis
+        foreach (Transform child in world.transform)
+        {
+            // Mirror the position (flip on X-axis)
+            Vector3 mirroredPosition = child.position;
+            mirroredPosition.x *= mirrorFactor; // Mirror the position
+
+            // Apply slight distortion (scaling)
+            child.localScale = scale;
+
+            child.position = mirroredPosition;
+        }
+    }
+}
