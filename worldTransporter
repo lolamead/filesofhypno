@@ -25,7 +25,7 @@ public class WorldTransporter : MonoBehaviour
 
     private void ToggleWorld()
     {
-        if (isMirrored)
+        if (mirroredWorld.activeSelf)
         {
             // Switch back to normal world
             ApplyWorldTransform(normalWorld, Vector3.one); // Restore to normal scale
@@ -40,7 +40,6 @@ public class WorldTransporter : MonoBehaviour
             mirroredWorld.SetActive(true);
         }
 
-        isMirrored = !isMirrored; // Toggle state
     }
 
     private void ApplyWorldTransform(GameObject world, Vector3 scale)
